@@ -13,6 +13,10 @@ let goalrotateY = 0,
 let rotateY_const = 0,
     rotateX_const = 0;
 
+var results;
+var pelimäärää;
+let currentresult = 0;
+let activeplayerid = 0;
 
 window.onload = function () {
 
@@ -20,7 +24,13 @@ window.onload = function () {
 
 }
 
-function btn_heittää(player) {
+function btn_heittää(pelijäid) {
+    activeplayerid = pelijäid;
+    let btn_heittää = document.querySelector('#pelijä' + pelijäid + ' #btn_heittää');
+    btn_heittää.disabled = true;
+
+
+
     if (nopparotated) {
         clearInterval(timer);
 
@@ -36,8 +46,8 @@ function btn_heittää(player) {
 
     nopparotated = true;
     timestarted = Date.now();
-    let result = Math.floor(Math.random() * 6 + 1);
-    switch (result) {
+    currentresult = Math.floor(Math.random() * 6 + 1);
+    switch (currentresult) {
         case 1: {
             goalrotateY = 360;
             goalrotateX = 360;
@@ -76,7 +86,6 @@ function btn_heittää(player) {
         goalrotateY += 360;
     }
 
-    console.log(result, goalrotateY, goalrotateX);
 
     rotateY_const = (goalrotateY - rotateY) / 120;
     rotateX_const = (goalrotateX - rotateX) / 120;
@@ -84,57 +93,85 @@ function btn_heittää(player) {
     timer = setInterval(peliisgoing, 20);
 
 }
-function btn_rittää(pelijaid) {
+function btn_rittää(pelijäid) {
 
-
-    let btn_heittää = document.querySelector('#pelija' + pelijaid + ' #btn_heittää');
+    activeplayerid = pelijäid;
+    let btn_heittää = document.querySelector('#pelijä' + pelijäid + ' #btn_heittää');
     btn_heittää.disabled = true;
-    let btn_rittää = document.querySelector('#pelija' + pelijaid + ' #btn_rittää');
+    let btn_rittää = document.querySelector('#pelijä' + pelijäid + ' #btn_rittää');
     btn_rittää.disabled = true;
-    let parent = document.querySelector('.pelijat');
+    let parent = document.querySelector('.pelijät');
 
-    if (pelijaid<parent.childElementCount-1){
-        pelijaid+=1;
-        let btn_heittää = document.querySelector('#pelija' + pelijaid + ' #btn_heittää');
+    if (pelijäid < parent.childElementCount - 1) {
+        pelijäid += 1;
+        let btn_heittää = document.querySelector('#pelijä' + pelijäid + ' #btn_heittää');
         btn_heittää.disabled = false;
-        let btn_rittää = document.querySelector('#pelija' + pelijaid + ' #btn_rittää');
+        let btn_rittää = document.querySelector('#pelijä' + pelijäid + ' #btn_rittää');
         btn_rittää.disabled = false;
-        let parent = document.querySelector('.pelijat');
-    
+
+    }
+    else {
+        maxresult =Math.max.apply(null, results);
+        console.log()
+        let Voittaja = "Voittaja:";
+        for (let i = 0; i < parent.childElementCount; i++) {
+            if (maxresult == results[i]) {
+                Voittaja += " pelijä" + (i + 1);
+            }
+
+            let pelijänimi = document.querySelector('#messagewinner');
+            pelijänimi.innerHTML = Voittaja;
+
+        }
+
 
     }
 
 }
 function btn_aloita() {
-    let peliajcount = document.getElementById('pelijacount').value;
-    let parent = document.querySelector('.pelijat');
+    let peliajcount = document.getElementById('pelijäcount').value;
+    let parent = document.querySelector('.pelijät');
     document.getElementById("btn_heittää").disabled = false;
     document.getElementById("btn_rittää").disabled = false;
+    let pelijänimi = document.querySelector('#messagewinner');
+    pelijänimi.innerHTML = "";
 
     while (parent.childElementCount > peliajcount) {
         parent.removeChild(parent.lastElementChild);
 
     }
 
+    results = [];
+    pelimäärää = [];
     for (let i = parent.childElementCount; i < peliajcount; i++) {
-        let pelija = document.querySelector(".pelija").cloneNode(true);
-        pelija.id = "pelija" + i;
-        document.querySelector(".pelijat").appendChild(pelija);
-
-        let btn_heittää = document.querySelector('#' + pelija.id + ' #btn_heittää');
+        let pelijä = document.querySelector(".pelijä").cloneNode(true);
+        pelijä.id = "pelijä" + i;
+        document.querySelector(".pelijät").appendChild(pelijä);
+        
+        let btn_heittää = document.querySelector('#' + pelijä.id + ' #btn_heittää');
         btn_heittää.setAttribute('onclick', 'btn_heittää(' + i + ')');
         btn_heittää.disabled = true;
-        let btn_rittää = document.querySelector('#' + pelija.id + ' #btn_rittää');
+        let btn_rittää = document.querySelector('#' + pelijä.id + ' #btn_rittää');
         btn_rittää.setAttribute('onclick', 'btn_rittää(' + i + ')');
         btn_rittää.disabled = true;
+        
+        let pelijänimi = document.querySelector('#' + pelijä.id + ' #pelijänimi');
+        pelijänimi.innerHTML = "Pelijä " + (i + 1);
+        console.log(pelijänimi);
+        
+    }
+    for (let i = 0; i < peliajcount; i++) {
+        results.push(0);
+        pelimäärää.push(0);
 
-        let pelijanimi = document.querySelector('#' + pelija.id + ' #pelijanimi');
-        pelijanimi.innerHTML = "Pelijä " + (i + 1);
-        console.log(pelijanimi);
+
+        let pelimäärääelement = document.querySelector('#pelijä' + i + ' #pelimäärää');
+        pelimäärääelement.innerHTML = "pelien määrää: ";
+        let pelijänimi = document.querySelector('#pelijä' + i + ' #peliresult');
+        pelijänimi.innerHTML = "result: ";
 
     }
-
-
+    
 
 }
 
@@ -144,6 +181,23 @@ function peliisgoing() {
 
 
     if (rotateY >= goalrotateY && rotateX >= goalrotateX) {
+        pelimäärää[activeplayerid] += 1;
+        if (currentresult > 1) {
+            results[activeplayerid] += currentresult;
+
+            let btn_heittää = document.querySelector('#pelijä' + activeplayerid + ' #btn_heittää');
+            btn_heittää.disabled = false;
+
+        }
+        else {
+            results[activeplayerid] = 0;
+            btn_rittää(activeplayerid);
+        }
+        let pelimäärääelement = document.querySelector('#pelijä' + activeplayerid + ' #pelimäärää');
+        pelimäärääelement.innerHTML = "pelien määrää: " + pelimäärää[activeplayerid];
+        let pelijänimi = document.querySelector('#pelijä' + activeplayerid + ' #peliresult');
+        pelijänimi.innerHTML = "result: " + results[activeplayerid];
+
 
         clearInterval(timer);
         return;

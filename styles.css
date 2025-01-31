@@ -6,9 +6,12 @@
     margin-right: auto;
     text-align: center;
   }
-  .pelijat{
+  .pelijät{
 
     display: flex;
+  }
+  h1{
+    color: white;
   }
   h1, h2, h3, h4 {
     font-family: 'Lato', sans-serif;
@@ -23,11 +26,11 @@ body {
   background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
 
 }
-.pelija{
+.pelijä{
     border: 5px solid  green;
 
 }
-.pelija_btns{
+.pelijä_btns{
     display: flex;
     justify-content: center;
 }
