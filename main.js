@@ -3,8 +3,6 @@ let peliStarted = false;
 let nopparotated = false;
 
 let timer;
-let timestarted;
-let timeduration = 1 * 1000;
 let rotateY = 0,
     rotateX = 0;
 let goalrotateY = 0,
@@ -24,9 +22,9 @@ window.onload = function () {
 
 }
 
-function btn_heittää(pelijäid) {
-    activeplayerid = pelijäid;
-    let btn_heittää = document.querySelector('#pelijä' + pelijäid + ' #btn_heittää');
+function btn_heittää(pelaajaid) {
+    activeplayerid = pelaajaid;
+    let btn_heittää = document.querySelector('#pelaaja' + pelaajaid + ' #btn_heittää');
     btn_heittää.disabled = true;
 
 
@@ -45,7 +43,6 @@ function btn_heittää(pelijäid) {
     }
 
     nopparotated = true;
-    timestarted = Date.now();
     currentresult = Math.floor(Math.random() * 6 + 1);
     switch (currentresult) {
         case 1: {
@@ -93,20 +90,20 @@ function btn_heittää(pelijäid) {
     timer = setInterval(peliisgoing, 20);
 
 }
-function btn_rittää(pelijäid) {
+function btn_rittää(pelaajaid) {
 
-    activeplayerid = pelijäid;
-    let btn_heittää = document.querySelector('#pelijä' + pelijäid + ' #btn_heittää');
+    activeplayerid = pelaajaid;
+    let btn_heittää = document.querySelector('#pelaaja' + pelaajaid + ' #btn_heittää');
     btn_heittää.disabled = true;
-    let btn_rittää = document.querySelector('#pelijä' + pelijäid + ' #btn_rittää');
+    let btn_rittää = document.querySelector('#pelaaja' + pelaajaid + ' #btn_rittää');
     btn_rittää.disabled = true;
-    let parent = document.querySelector('.pelijät');
+    let parent = document.querySelector('.pelaajat');
 
-    if (pelijäid < parent.childElementCount - 1) {
-        pelijäid += 1;
-        let btn_heittää = document.querySelector('#pelijä' + pelijäid + ' #btn_heittää');
+    if (pelaajaid < parent.childElementCount - 1) {
+        pelaajaid += 1;
+        let btn_heittää = document.querySelector('#pelaaja' + pelaajaid + ' #btn_heittää');
         btn_heittää.disabled = false;
-        let btn_rittää = document.querySelector('#pelijä' + pelijäid + ' #btn_rittää');
+        let btn_rittää = document.querySelector('#pelaaja' + pelaajaid + ' #btn_rittää');
         btn_rittää.disabled = false;
 
     }
@@ -116,11 +113,11 @@ function btn_rittää(pelijäid) {
         let Voittaja = "Voittaja:";
         for (let i = 0; i < parent.childElementCount; i++) {
             if (maxresult == results[i]) {
-                Voittaja += " pelijä" + (i + 1);
+                Voittaja += " pelaaja" + (i + 1);
             }
 
-            let pelijänimi = document.querySelector('#messagewinner');
-            pelijänimi.innerHTML = Voittaja;
+            let pelaajanimi = document.querySelector('#messagewinner');
+            pelaajanimi.innerHTML = Voittaja;
 
         }
 
@@ -129,12 +126,12 @@ function btn_rittää(pelijäid) {
 
 }
 function btn_aloita() {
-    let peliajcount = document.getElementById('pelijäcount').value;
-    let parent = document.querySelector('.pelijät');
+    let peliajcount = document.getElementById('pelaajacount').value;
+    let parent = document.querySelector('.pelaajat');
     document.getElementById("btn_heittää").disabled = false;
     document.getElementById("btn_rittää").disabled = false;
-    let pelijänimi = document.querySelector('#messagewinner');
-    pelijänimi.innerHTML = "";
+    let pelaajanimi = document.querySelector('#messagewinner');
+    pelaajanimi.innerHTML = "";
 
     while (parent.childElementCount > peliajcount) {
         parent.removeChild(parent.lastElementChild);
@@ -144,20 +141,20 @@ function btn_aloita() {
     results = [];
     pelimäärää = [];
     for (let i = parent.childElementCount; i < peliajcount; i++) {
-        let pelijä = document.querySelector(".pelijä").cloneNode(true);
-        pelijä.id = "pelijä" + i;
-        document.querySelector(".pelijät").appendChild(pelijä);
+        let pelaaja = document.querySelector(".pelaaja").cloneNode(true);
+        pelaaja.id = "pelaaja" + i;
+        document.querySelector(".pelaajat").appendChild(pelaaja);
         
-        let btn_heittää = document.querySelector('#' + pelijä.id + ' #btn_heittää');
+        let btn_heittää = document.querySelector('#' + pelaaja.id + ' #btn_heittää');
         btn_heittää.setAttribute('onclick', 'btn_heittää(' + i + ')');
         btn_heittää.disabled = true;
-        let btn_rittää = document.querySelector('#' + pelijä.id + ' #btn_rittää');
+        let btn_rittää = document.querySelector('#' + pelaaja.id + ' #btn_rittää');
         btn_rittää.setAttribute('onclick', 'btn_rittää(' + i + ')');
         btn_rittää.disabled = true;
         
-        let pelijänimi = document.querySelector('#' + pelijä.id + ' #pelijänimi');
-        pelijänimi.innerHTML = "Pelijä " + (i + 1);
-        console.log(pelijänimi);
+        let pelaajanimi = document.querySelector('#' + pelaaja.id + ' #pelaajanimi');
+        pelaajanimi.innerHTML = "pelaaja " + (i + 1);
+        console.log(pelaajanimi);
         
     }
     for (let i = 0; i < peliajcount; i++) {
@@ -165,10 +162,10 @@ function btn_aloita() {
         pelimäärää.push(0);
 
 
-        let pelimäärääelement = document.querySelector('#pelijä' + i + ' #pelimäärää');
+        let pelimäärääelement = document.querySelector('#pelaaja' + i + ' #pelimäärää');
         pelimäärääelement.innerHTML = "pelien määrää: ";
-        let pelijänimi = document.querySelector('#pelijä' + i + ' #peliresult');
-        pelijänimi.innerHTML = "result: ";
+        let pelaajanimi = document.querySelector('#pelaaja' + i + ' #peliresult');
+        pelaajanimi.innerHTML = "result: ";
 
     }
     
@@ -176,16 +173,12 @@ function btn_aloita() {
 }
 
 function peliisgoing() {
-    let timePassed = Date.now() - timestarted;
-
-
-
     if (rotateY >= goalrotateY && rotateX >= goalrotateX) {
         pelimäärää[activeplayerid] += 1;
         if (currentresult > 1) {
             results[activeplayerid] += currentresult;
 
-            let btn_heittää = document.querySelector('#pelijä' + activeplayerid + ' #btn_heittää');
+            let btn_heittää = document.querySelector('#pelaaja' + activeplayerid + ' #btn_heittää');
             btn_heittää.disabled = false;
 
         }
@@ -193,10 +186,10 @@ function peliisgoing() {
             results[activeplayerid] = 0;
             btn_rittää(activeplayerid);
         }
-        let pelimäärääelement = document.querySelector('#pelijä' + activeplayerid + ' #pelimäärää');
+        let pelimäärääelement = document.querySelector('#pelaaja' + activeplayerid + ' #pelimäärää');
         pelimäärääelement.innerHTML = "pelien määrää: " + pelimäärää[activeplayerid];
-        let pelijänimi = document.querySelector('#pelijä' + activeplayerid + ' #peliresult');
-        pelijänimi.innerHTML = "result: " + results[activeplayerid];
+        let pelaajanimi = document.querySelector('#pelaaja' + activeplayerid + ' #peliresult');
+        pelaajanimi.innerHTML = "result: " + results[activeplayerid];
 
 
         clearInterval(timer);

@@ -6,7 +6,7 @@
     margin-right: auto;
     text-align: center;
   }
-  .pelijät{
+  .pelaajat{
 
     display: flex;
   }
@@ -26,11 +26,11 @@ body {
   background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
 
 }
-.pelijä{
+.pelaaja{
     border: 5px solid  green;
 
 }
-.pelijä_btns{
+.pelaaja_btns{
     display: flex;
     justify-content: center;
 }
